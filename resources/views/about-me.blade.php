@@ -112,6 +112,44 @@
             text-align: center;
         }
 
+        .portfolio-card {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            padding: 0;
+            overflow: hidden;
+            /* ให้รูปโค้งตามมุมการ์ด */
+            background: #1e1e1e;
+            border: 1px solid #2a2a2a;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+            color: #e0e0e0;
+            transition: 0.2s;
+        }
+
+        .portfolio-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+            background: #262626;
+            color: #ffffff;
+        }
+
+        .portfolio-card .icon-img {
+            width: 100%;
+            height: 180px;
+            /* ปรับความสูงได้ */
+            object-fit: cover;
+            /* เต็มช่อง ตัดส่วนเกิน */
+            margin-bottom: 0;
+            display: block;
+        }
+
+        .portfolio-card .label {
+            font-weight: 600;
+            text-align: center;
+            padding: 14px 16px;
+        }
 
         @media (max-width: 900px) {
             .profile-row {
@@ -131,6 +169,7 @@
             position: relative;
             overflow-x: hidden;
         }
+
         body::before,
         body::after {
             content: "";
@@ -141,7 +180,7 @@
             z-index: -1;
             pointer-events: none;
             background-image:
-                
+
                 repeating-linear-gradient(45deg,
                     rgba(255, 255, 255, 0.04) 0,
                     rgba(255, 255, 255, 0.04) 2px,
@@ -154,7 +193,7 @@
 
         body::before {
             left: 0;
-            
+
             -webkit-mask-image: linear-gradient(to right, #000 30%, transparent);
             mask-image: linear-gradient(to right, #000 30%, transparent);
         }
@@ -178,7 +217,7 @@
     <div class="profile-row">
         <div class="side-images">
             <img src="{{ asset('assets/img/icons/shadow.webp') }}" alt="">
-             <img src="{{ asset('assets/img/icons/doomgay.jpg') }}" alt="">
+            <img src="{{ asset('assets/img/icons/doomgay.jpg') }}" alt="">
         </div>
 
         <div class="profile-header">
@@ -210,7 +249,7 @@
                 <span class="label">EP07 Weight</span>
             </a>
             <a href="/login" class="portfolio-card">
-                <img src="{{ asset('assets/img/icons/โจร.jpg') }}" alt="" class="icon-img">
+                <img src="{{ asset('assets/img/icons/imax.jpg') }}" alt="" class="icon-img">
                 <span class="label">EP08 Auth (Login)</span>
             </a>
         </div>
