@@ -1,7 +1,28 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use App\Http\Controllers\WeightController;
+use App\Http\Controllers\ProfileController;
+use Inertia\Inertia;
+use App\Http\Controllers\LicenseController;  
+use App\Http\Controllers\UserController; 
+use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\AboutMeController;
+
+
+
+Route::get('/about-me', [AboutMeController::class, 'index']);
+
+
+Route::resource('license', LicenseController::class);
+Route::resource('user', UserController::class);
+Route::resource('vehicle', VehicleController::class);
+
+Route::get('/weights', [WeightController::class, 'index'])->name('weights.index');
+
+
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -9,11 +30,10 @@ Route::get('/', function () {
 
 Route::get("/teacher", function () {
     return view("teacher");
-});
-
+})->middleware('auth,role:admin,teacher,student,guest');
 Route::get("/student", function () {
     return view("student");
-});
+})->middleware('auth,role:admin,teacher,student,guest');
 
 Route::get("/theme", function () {
     return view("theme");
@@ -95,3 +115,117 @@ Route::get('/category/sport', [CategoryController::class, "sport"]);
 Route::get('/category/politic', [CategoryController::class, "politic"]);
 Route::get('/category/entertain', [CategoryController::class, "entertain"]);
 Route::get('/category/auto', [CategoryController::class, "auto"]);
+
+use App\Http\Controllers\Covid19Controller;
+
+Route::get('/covid19', [ Covid19Controller::class,"index" ]);
+
+use App\Models\Product;
+use Illuminate\Support\Facades\DB;
+
+Route::get('query/sql', function () {
+    $products = DB::select("SELECT * FROM products");
+    // $products = DB::select("SELECT * FROM products WHERE price > 100");
+    return view('query-test', compact('products'));
+});
+
+Route::get('query/builder', function () {
+    $products = DB::table('products')->get();
+    // $products = DB::table('products')->where('price', '>', 100)->get();
+    return view('query-test', compact('products'));
+});
+
+Route::get('query/orm', function () {
+    $products = Product::get();
+    // $products = Product::where('price', '>', 100)->get();
+    return view('query-test', compact('products'));
+});
+
+
+Route::get('barchart', function () {    
+    return view('barchart');
+})->name('barchart');
+
+Route::get('product-index', function () {
+    $products = Product::get();
+    return view('query-test', compact('products'));
+})->name("product.index");
+
+
+Route::get('product-form', function () {    
+    return view('product-form');
+})->name("product.form");
+
+Route::post('/product-submit', function (Request $request) {    
+    $data = $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'required|string',
+        'price' => 'required|numeric|min:0',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+    ]);   
+    
+    $data = $request->validate([
+    'name' => 'required|string|max:255',
+    'description' => 'required|string',
+    'price' => 'required|numeric|min:0',
+    'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+]
+ , [
+    'name.required' => 'กรุณากรอกชื่อสินค้า',
+    'description.required' => 'กรุณากรอกรายละเอียดสินค้า',
+    'price.required' => 'กรุณากรอกราคา',
+    'price.numeric' => 'ราคาต้องเป็นตัวเลข',
+    'image.image' => 'ไฟล์ต้องเป็นรูปภาพ',
+] );
+
+
+    // ตรวจสอบว่ามีการอัปโหลดรูปภาพ
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('uploads', 'public');
+        $url = Storage::url($imagePath);
+        $data["image"] =$url;
+    }
+
+    // บันทึกข้อมูลในฐานข้อมูล
+    Product::create($data);
+
+    return redirect()->route('product.index')->with('success', 'เพิ่มสินค้าแล้ว!');
+})->name('product.submit');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/weights/create', [WeightController::class, 'create'])->name('weights.create');
+    Route::post('/weights', [WeightController::class, 'store'])->name('weights.store');
+    Route::get('/weights/{weight}/edit', [WeightController::class, 'edit'])->name('weights.edit');
+    Route::put('/weights/{weight}', [WeightController::class, 'update'])->name('weights.update');
+    Route::delete('/weights/{weight}', [WeightController::class, 'destroy'])->name('weights.destroy');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/teacher', function () {
+        return view('teacher');
+    });
+});
+
+Route::middleware(['auth','role:admin,teacher'])->group(function () {
+    Route::get('/teacher', function () {
+       return view('teacher');
+    });
+});
+
+
+
+
+
+
+require __DIR__.'/auth.php';
