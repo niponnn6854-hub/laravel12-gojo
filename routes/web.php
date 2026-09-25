@@ -9,9 +9,27 @@ use App\Http\Controllers\LicenseController;
 use App\Http\Controllers\UserController; 
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\AboutMeController;
+use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\Covid19Controller;
+use App\Models\Product;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\MeetingAgendaController;
+use App\Http\Controllers\MeetingDocumentController;
 
 
 
+
+Route::post('/meetings/{meeting}/agendas', [MeetingAgendaController::class, 'store'])->name('agendas.store');
+Route::delete('/agendas/{agenda}', [MeetingAgendaController::class, 'destroy'])->name('agendas.destroy');
+ 
+Route::post('/meetings/{meeting}/documents', [MeetingDocumentController::class, 'store'])->name('documents.store');
+Route::delete('/documents/{document}', [MeetingDocumentController::class, 'destroy'])->name('documents.destroy');
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('rooms', RoomController::class)->except(['show']);
+    Route::resource('meetings', MeetingController::class);
+    });
 Route::get('/about-me', [AboutMeController::class, 'index']);
 
 
@@ -116,12 +134,11 @@ Route::get('/category/politic', [CategoryController::class, "politic"]);
 Route::get('/category/entertain', [CategoryController::class, "entertain"]);
 Route::get('/category/auto', [CategoryController::class, "auto"]);
 
-use App\Http\Controllers\Covid19Controller;
+
 
 Route::get('/covid19', [ Covid19Controller::class,"index" ]);
 
-use App\Models\Product;
-use Illuminate\Support\Facades\DB;
+
 
 Route::get('query/sql', function () {
     $products = DB::select("SELECT * FROM products");
