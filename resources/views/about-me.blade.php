@@ -6,19 +6,178 @@
     <title>About Me</title>
     <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <style>
-        body {
-            background-color: #121212;
-            font-family: 'Segoe UI', sans-serif;
-            color: #e0e0e0;
+        :root {
+            --neon-pink: #ff2fd0;
+            --neon-cyan: #00f6ff;
+            --neon-purple: #a742ff;
         }
 
-        .profile-row {
-            max-width: 1100px;
-            margin: 60px auto 30px;
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background-color: #05010d;
+            font-family: 'Segoe UI', sans-serif;
+            color: #e8e8ff;
+        }
+
+        /* ===== HEADER เต็มจอด้านบน ===== */
+        .hero-header {
+            position: relative;
+            width: 100%;
+            padding: 70px 20px 60px;
+            text-align: center;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 0%, #1a0b33 0%, #05010d 70%);
+            border-bottom: 1px solid rgba(0, 246, 255, 0.4);
+            box-shadow: 0 4px 30px rgba(0, 246, 255, 0.15);
+        }
+
+        /* ลายกริดเฉพาะใน header */
+        .hero-header::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background-image:
+                linear-gradient(rgba(0, 246, 255, 0.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 246, 255, 0.07) 1px, transparent 1px);
+            background-size: 40px 40px;
+            -webkit-mask-image: linear-gradient(to bottom, #000, transparent);
+            mask-image: linear-gradient(to bottom, #000, transparent);
+        }
+
+        .hero-header>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--neon-pink);
+            box-shadow:
+                0 0 10px var(--neon-pink),
+                0 0 25px rgba(255, 47, 208, 0.6);
+            margin-bottom: 22px;
+        }
+
+        .hero-header h1 {
+            color: #ffffff;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-shadow:
+                0 0 6px var(--neon-cyan),
+                0 0 18px rgba(0, 246, 255, 0.6);
+            margin-bottom: 8px;
+        }
+
+        .hero-header .student-id {
+            color: var(--neon-purple);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+
+        .scroll-hint {
+            margin-top: 30px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: rgba(232, 232, 255, 0.5);
+            letter-spacing: 2px;
+            animation: bounce 1.8s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: translateY(6px);
+                opacity: 1;
+            }
+        }
+
+        /* ===== ผลงานเต็มจอด้านล่าง ===== */
+        .portfolio-section {
+            width: 100%;
+            padding: 60px 20px 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .portfolio-section h2 {
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .portfolio-section h2::before {
+            content: "> ";
+            color: var(--neon-pink);
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+        }
+
+        .portfolio-card {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            overflow: hidden;
+            background: rgba(10, 5, 20, 0.9);
+            border: 1px solid rgba(0, 246, 255, 0.35);
+            border-radius: 12px;
+            text-decoration: none;
+            color: #e8e8ff;
+            transition: 0.25s ease;
+        }
+
+        .portfolio-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--neon-pink);
+            box-shadow:
+                0 0 10px var(--neon-pink),
+                0 0 30px rgba(255, 47, 208, 0.4);
+            color: #ffffff;
+        }
+
+        .portfolio-card .icon-img {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+            display: block;
+            filter: saturate(1.1) contrast(1.05);
+        }
+
+        .portfolio-card .label {
+            font-weight: 700;
+            text-align: center;
+            padding: 14px 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .header-row {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
+            gap: 40px;
+            max-width: 1100px;
+            margin: 0 auto;
         }
 
         .side-images {
@@ -28,131 +187,27 @@
         }
 
         .side-images img {
-            width: 130px;
-            height: 130px;
+            width: 100px;
+            height: 100px;
             object-fit: cover;
             border-radius: 12px;
-            border: 2px solid #2a2a2a;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .profile-header {
-            flex: 1;
-            max-width: 700px;
-            background: #1e1e1e;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-            padding: 40px;
-            text-align: center;
-        }
-
-        .profile-img {
-            width: 160px;
-            height: 160px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 4px solid #2a2a2a;
-            margin-bottom: 20px;
-        }
-
-        .profile-header h1 {
-            color: #ffffff;
-        }
-
-        .profile-header .text-muted {
-            color: #9e9e9e !important;
-        }
-
-        .portfolio-section {
-            max-width: 700px;
-            margin: 0 auto 60px;
-        }
-
-        .portfolio-section h2 {
-            color: #ffffff;
-        }
-
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
-
-        .portfolio-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 30px 16px;
-            background: #1e1e1e;
-            border: 1px solid #2a2a2a;
-            border-radius: 14px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            text-decoration: none;
-            color: #e0e0e0;
+            border: 2px solid var(--neon-cyan);
+            box-shadow:
+                0 0 6px rgba(0, 246, 255, 0.5),
+                0 0 16px rgba(0, 246, 255, 0.25);
             transition: 0.2s;
         }
 
-        .portfolio-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
-            background: #262626;
-            color: #ffffff;
-        }
-
-        .portfolio-card .icon-img {
-            width: 48px;
-            height: 48px;
-            object-fit: contain;
-            margin-bottom: 10px;
-        }
-
-        .portfolio-card .label {
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .portfolio-card {
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            padding: 0;
-            overflow: hidden;
-            /* ให้รูปโค้งตามมุมการ์ด */
-            background: #1e1e1e;
-            border: 1px solid #2a2a2a;
-            border-radius: 14px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            text-decoration: none;
-            color: #e0e0e0;
-            transition: 0.2s;
-        }
-
-        .portfolio-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
-            background: #262626;
-            color: #ffffff;
-        }
-
-        .portfolio-card .icon-img {
-            width: 100%;
-            height: 180px;
-            /* ปรับความสูงได้ */
-            object-fit: cover;
-            /* เต็มช่อง ตัดส่วนเกิน */
-            margin-bottom: 0;
-            display: block;
-        }
-
-        .portfolio-card .label {
-            font-weight: 600;
-            text-align: center;
-            padding: 14px 16px;
+        .side-images img:hover {
+            border-color: var(--neon-pink);
+            box-shadow:
+                0 0 8px var(--neon-pink),
+                0 0 20px rgba(255, 47, 208, 0.5);
+            transform: translateY(-3px);
         }
 
         @media (max-width: 900px) {
-            .profile-row {
+            .header-row {
                 flex-direction: column;
             }
 
@@ -161,52 +216,19 @@
             }
         }
 
-        body {
-            background-color: #121212;
-            font-family: 'Segoe UI', sans-serif;
-            color: #e0e0e0;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        body::before,
-        body::after {
-            content: "";
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            width: 22vw;
-            z-index: -1;
-            pointer-events: none;
-            background-image:
-
-                repeating-linear-gradient(45deg,
-                    rgba(255, 255, 255, 0.04) 0,
-                    rgba(255, 255, 255, 0.04) 2px,
-                    transparent 2px,
-                    transparent 14px),
-                /* จุด */
-                radial-gradient(rgba(255, 255, 255, 0.10) 1.5px, transparent 1.5px);
-            background-size: auto, 22px 22px;
-        }
-
-        body::before {
-            left: 0;
-
-            -webkit-mask-image: linear-gradient(to right, #000 30%, transparent);
-            mask-image: linear-gradient(to right, #000 30%, transparent);
-        }
-
-        body::after {
-            right: 0;
-            -webkit-mask-image: linear-gradient(to left, #000 30%, transparent);
-            mask-image: linear-gradient(to left, #000 30%, transparent);
+        @media (max-width: 992px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 576px) {
-            .portfolio-grid {
-                grid-template-columns: 1fr;
+            .hero-header {
+                padding: 50px 16px 40px;
+            }
+
+            .portfolio-section {
+                padding: 40px 16px 60px;
             }
         }
     </style>
@@ -214,16 +236,17 @@
 
 <body>
 
-    <div class="profile-row">
+<div class="hero-header">
+    <div class="header-row">
         <div class="side-images">
             <img src="{{ asset('assets/img/icons/shadow.webp') }}" alt="">
             <img src="{{ asset('assets/img/icons/doomgay.jpg') }}" alt="">
         </div>
 
-        <div class="profile-header">
+        <div class="profile-block">
             <img src="{{ asset('assets/img/kiriphone.png') }}" alt="รูปโปรไฟล์" class="profile-img">
-            <h1 class="h3 mb-1">นิพนธ์ เพ็งคล้าย</h1>
-            <p class="text-muted mb-0">รหัสนักศึกษา: 68122420014</p>
+            <h1 class="h3">นิพนธ์ เพ็งคล้าย</h1>
+            <p class="student-id">รหัสนักศึกษา: 68122420014</p>
         </div>
 
         <div class="side-images">
@@ -231,9 +254,12 @@
             <img src="{{ asset('assets/img/icons/lokii.webp') }}" alt="">
         </div>
     </div>
+    <div class="scroll-hint text-center"></div>
+</div>
 
+    
     <div class="portfolio-section">
-        <h2 class="h5 mb-3 text-center">งานที่เคยทำ</h2>
+        <h2 class="h5">งานที่เคยทำ</h2>
         <div class="portfolio-grid">
             <a href="/gallery" class="portfolio-card">
                 <img src="{{ asset('assets/img/icons/loki.webp') }}" alt="" class="icon-img">
@@ -244,10 +270,12 @@
                 <img src="{{ asset('assets/img/icons/pun.jpg') }}" alt="" class="icon-img">
                 <span class="label">EP03 Active Bootstrap</span>
             </a>
+
             <a href="/weights" class="portfolio-card">
                 <img src="{{ asset('assets/img/icons/weights.jpg') }}" alt="" class="icon-img">
                 <span class="label">EP07 Weight</span>
             </a>
+
             <a href="/login" class="portfolio-card">
                 <img src="{{ asset('assets/img/icons/imax.jpg') }}" alt="" class="icon-img">
                 <span class="label">EP08 Auth (Login)</span>
