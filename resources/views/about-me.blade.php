@@ -267,7 +267,7 @@
             </a>
 
             <a href="/active/index" class="portfolio-card">
-                <img src="{{ asset('assets/img/icons/pun.jpg') }}" alt="" class="icon-img">
+                <img src="{{ asset('assets/img/icons/._119932207_indifferentcatgettyimages.png') }}" alt="" class="icon-img">
                 <span class="label">EP03 Active Bootstrap</span>
             </a>
 
